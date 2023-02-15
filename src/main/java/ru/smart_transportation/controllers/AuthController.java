@@ -28,6 +28,7 @@ public class AuthController {
     @Autowired
     AppUserRepository userRepository;
 
+
     @Autowired
     RoleRepository roleRepository;
 

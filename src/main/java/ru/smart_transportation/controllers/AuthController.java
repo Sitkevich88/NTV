@@ -64,6 +64,7 @@ public class AuthController {
                     .body(response);
         }
 
+
         // Create new user's account
         final var appUser = new AppUser();
         appUser.setUsername(newUser.getUsername());

@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.smart_transportation.dto.request.NewUser;
 import ru.smart_transportation.dto.request.OldUser;
 import ru.smart_transportation.dto.response.AuthResponse;
-import ru.smart_transportation.entity.AppUser;
-import ru.smart_transportation.repo.AppUserRepository;
+import ru.smart_transportation.entity.User;
 import ru.smart_transportation.repo.RoleRepository;
+import ru.smart_transportation.repo.UserRepository;
 import ru.smart_transportation.security.JwtTokenProvider;
 import ru.smart_transportation.etc.DatabaseRole;
-import ru.smart_transportation.service.ClientService;
 
 @RestController
 @CrossOrigin("*")
@@ -24,10 +23,6 @@ public class AuthController {
 
     @Autowired
     AuthenticationManager authenticationManager;
-
-    @Autowired
-    AppUserRepository userRepository;
-
     @Autowired
     RoleRepository roleRepository;
 
@@ -38,7 +33,7 @@ public class AuthController {
     PasswordEncoder encoder;
 
     @Autowired
-    ClientService clientService;
+    UserRepository userRepository;
 
     @PostMapping("signin")
     ResponseEntity<AuthResponse> signIn(@RequestBody OldUser user){
@@ -57,7 +52,7 @@ public class AuthController {
     @PostMapping("signup")
     ResponseEntity<AuthResponse> signUp(@RequestBody NewUser newUser){
         final var response = new AuthResponse();
-        if (userRepository.existsByUsername(newUser.getUsername())) {
+        if (userRepository.existsByLogin(newUser.getUsername())) {
             response.setErrorMessage("Придумайте другой логин");
             return ResponseEntity
                     .badRequest()
@@ -66,16 +61,15 @@ public class AuthController {
 
 
         // Create new user's account
-        final var appUser = new AppUser();
-        appUser.setUsername(newUser.getUsername());
-        appUser.setPassword(encoder.encode(newUser.getPassword()));
-        appUser.setRole(
+        final var user = new User();
+        user.setLogin(newUser.getUsername());
+        user.setPassword(encoder.encode(newUser.getPassword()));
+        user.setRole(
                 roleRepository.findRoleByRoleName(
                         DatabaseRole.ROLE_CLIENT.name()
                 )
         );
-        userRepository.save(appUser);
-        clientService.createClient(newUser, appUser);
+        userRepository.save(user);
 
 
         // Sign in

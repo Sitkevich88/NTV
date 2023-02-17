@@ -6,25 +6,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.smart_transportation.entity.AppUser;
-import ru.smart_transportation.repo.AppUserRepository;
+import ru.smart_transportation.entity.User;
+import ru.smart_transportation.repo.UserRepository;
+
 import java.util.Collections;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private AppUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final AppUser user = userRepository
-                .findByUsername(username)
+        final User user = userRepository
+                .findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
         final var roleName = user.getRole().getRoleName();
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
+                user.getLogin(),
                 user.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority(roleName))
         );

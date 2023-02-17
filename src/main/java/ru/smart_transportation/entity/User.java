@@ -8,16 +8,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "app_user")
-public class AppUser {
+@Table(name = "my_user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(name = "app_user_id_seq", sequenceName = "app_user_id_seq")
+    @SequenceGenerator(name = "my_user_id_seq", sequenceName = "my_user_id_seq")
     @Column(name = "id")
     private int id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "login")
+    private String login;
 
     @JsonIgnore
     @Column(name = "password")
@@ -26,4 +26,6 @@ public class AppUser {
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
+
+
 }

@@ -2,8 +2,8 @@ package ru.ntv.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -42,8 +42,6 @@ public class Article {
     private String photo;
 
     @Column(name = "creation_date")
-    @CreatedDate
-    private String creationDate;
-
-
+    @CreationTimestamp
+    private LocalDateTime creationDate;
 }

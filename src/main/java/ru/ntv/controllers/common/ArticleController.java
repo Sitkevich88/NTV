@@ -26,22 +26,29 @@ public class ArticleController {
 
     @GetMapping("article/byArticleHeader")
     ResponseEntity<ArticleResponse> articleByArticleHeader(@RequestBody GetByArticleHeaderRequest req){
-      Optional<Article> optionalArticle = articleService.findByHeader(req.getHeader());
+        final var res = new ArticleResponse();
 
-      return ResponseEntity.ok(new ArticleResponse(optionalArticle.get()));
+        Optional<Article> optionalArticle = articleService.findByHeader(req.getHeader());
+        optionalArticle.ifPresent(res::setArticle);
+
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("article/byArticleThemes")
     ResponseEntity<ArticleListResponse> articlesByArticleThemes(@RequestBody GetByArticleThemesRequest req){
         List<Article> optionalArticleList = articleService.getArticlesByThemes(req.getThemes());
+
         return ResponseEntity.ok(new ArticleListResponse(optionalArticleList));
     }
 
     @GetMapping("article/byId")
     ResponseEntity<ArticleResponse> articleByArticleId(@RequestBody GetByArticleIdRequest req){
-        Optional<Article> optionalArticle = articleService.findById(req.getId());
+        final var res = new ArticleResponse();
 
-        return ResponseEntity.ok(new ArticleResponse(optionalArticle.get()));
+        Optional<Article> optionalArticle = articleService.findById(req.getId());
+        optionalArticle.ifPresent(res::setArticle);
+
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("articles")

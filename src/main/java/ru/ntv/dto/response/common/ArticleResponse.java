@@ -1,14 +1,15 @@
-package ru.ntv.dto.request;
+package ru.ntv.dto.response.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.ntv.entity.Article;
 
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetByArticleIdRequest implements Serializable {
-    private int id;
+public class ArticleResponse implements Serializable {
+    private Article article;
 }

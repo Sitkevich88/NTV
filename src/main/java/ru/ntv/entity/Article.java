@@ -21,7 +21,7 @@ public class Article {
     @JoinTable(
             name = "article_theme",
             joinColumns = {@JoinColumn(name = "article_id")},
-            inverseJoinColumns = {@JoinColumn(name = "taste_id")}
+            inverseJoinColumns = {@JoinColumn(name = "theme_id")}
     )
     private List<Theme> themes;
 

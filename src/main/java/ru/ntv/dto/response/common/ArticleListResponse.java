@@ -1,9 +1,9 @@
-package ru.ntv.dto.request;
+package ru.ntv.dto.response.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ntv.entity.Theme;
+import ru.ntv.entity.Article;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +11,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetByArticleThemesRequest implements Serializable {
-    private List<Theme> themes;
+public class ArticleListResponse implements Serializable {
+    private List<Article> articles;
 }

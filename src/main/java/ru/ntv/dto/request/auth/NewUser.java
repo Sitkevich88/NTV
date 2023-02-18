@@ -1,14 +1,14 @@
-package ru.ntv.dto.request;
+package ru.ntv.dto.request.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetByArticleHeaderRequest implements Serializable {
-    private String header;
+public class NewUser implements Serializable {
+    private String username;
+    private String password;
 }

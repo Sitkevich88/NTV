@@ -1,4 +1,4 @@
-package ru.ntv.controllers;
+package ru.ntv.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -7,9 +7,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ru.ntv.dto.request.NewUser;
-import ru.ntv.dto.request.OldUser;
-import ru.ntv.dto.response.AuthResponse;
+import ru.ntv.dto.request.auth.NewUser;
+import ru.ntv.dto.request.auth.OldUser;
+import ru.ntv.dto.response.auth.AuthResponse;
 import ru.ntv.entity.User;
 import ru.ntv.repo.RoleRepository;
 import ru.ntv.repo.UserRepository;

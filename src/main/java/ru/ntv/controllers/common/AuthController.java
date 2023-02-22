@@ -1,11 +1,15 @@
 package ru.ntv.controllers.common;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.ntv.dto.request.auth.NewUser;
 import ru.ntv.dto.request.auth.OldUser;
@@ -19,6 +23,7 @@ import ru.ntv.etc.DatabaseRole;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("auth")
+@Validated
 public class AuthController {
 
     @Autowired
@@ -36,21 +41,21 @@ public class AuthController {
     UserRepository userRepository;
 
     @PostMapping("signin")
-    ResponseEntity<AuthResponse> signIn(@RequestBody OldUser user){
-        final var authentication = authenticationManager.authenticate(
+    ResponseEntity<AuthResponse> signIn(@Valid @RequestBody OldUser user) throws BadCredentialsException {
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final var jwt = jwtUtils.generateToken(authentication);
-        final var response = new AuthResponse();
+        String jwt = jwtUtils.generateToken(authentication);
+        AuthResponse response = new AuthResponse();
         response.setJwt("Bearer " + jwt);
 
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("signup")
-    ResponseEntity<AuthResponse> signUp(@RequestBody NewUser newUser){
+    ResponseEntity<AuthResponse> signUp(@Valid @RequestBody NewUser newUser){
         final var response = new AuthResponse();
         if (userRepository.existsByLogin(newUser.getUsername())) {
             response.setErrorMessage("Придумайте другой логин");

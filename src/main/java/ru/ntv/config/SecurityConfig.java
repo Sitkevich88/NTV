@@ -44,6 +44,8 @@ public class SecurityConfig{
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .cors()
                 .and()
+                .httpBasic()
+                .and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)  //если пользователь не зарегестрирован,то он обрабатывается тут

@@ -10,5 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetByArticleIdRequest implements Serializable {
+
     private int id;
 }

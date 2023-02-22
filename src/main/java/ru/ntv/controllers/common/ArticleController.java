@@ -1,8 +1,10 @@
 package ru.ntv.controllers.common;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.ntv.dto.request.common.GetByArticleHeaderRequest;
 import ru.ntv.dto.request.common.GetByArticleIdRequest;
@@ -19,13 +21,14 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("common")
+@Validated
 public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
 
     @GetMapping("article/byArticleHeader")
-    ResponseEntity<ArticleResponse> articleByArticleHeader(@RequestBody GetByArticleHeaderRequest req){
+    ResponseEntity<ArticleResponse> articleByArticleHeader(@Valid @RequestBody GetByArticleHeaderRequest req){
         final var res = new ArticleResponse();
 
         Optional<Article> optionalArticle = articleService.findByHeader(req.getHeader());
@@ -35,7 +38,7 @@ public class ArticleController {
     }
 
     @GetMapping("article/byArticleThemes")
-    ResponseEntity<ArticleListResponse> articlesByArticleThemes(@RequestBody GetByArticleThemesRequest req){
+    ResponseEntity<ArticleListResponse> articlesByArticleThemes( @RequestBody GetByArticleThemesRequest req){
         List<Article> optionalArticleList = articleService.getArticlesByThemes(req.getThemes());
 
         return ResponseEntity.ok(new ArticleListResponse(optionalArticleList));

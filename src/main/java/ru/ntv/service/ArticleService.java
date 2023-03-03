@@ -4,6 +4,9 @@ package ru.ntv.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.admin.NewArticleRequest;
+import ru.ntv.dto.request.admin.UpdateRequest;
+import ru.ntv.dto.request.common.GetByArticleIdRequest;
+import ru.ntv.exception.ArticleNotFoundException;
 import ru.ntv.dto.response.common.ArticlesResponse;
 import ru.ntv.entity.Article;
 import ru.ntv.entity.Theme;
@@ -47,6 +50,32 @@ public class ArticleService {
         return res;
     }
 
+    public void update(UpdateRequest req) throws ArticleNotFoundException{
+        var oldArticleOptional = articleRepository.findById(req.getId());
+        if (oldArticleOptional.isEmpty()) throw new ArticleNotFoundException("Article with that id wasn't found!");
+
+        var oldArticle = oldArticleOptional.get();
+
+        if (req.getText() != null) oldArticle.setText(req.getText());
+        if (req.getHeader() != null) oldArticle.setHeader(req.getHeader());
+        if (req.getSubheader() != null) oldArticle.setSubheader(req.getSubheader());
+        if (req.getThemeIds() != null) {
+            var themes = themeRepository.findAllById(req.getThemeIds());
+            oldArticle.setThemes(themes);
+        }
+        if (req.getPhotoURL() != null) oldArticle.setPhoto(req.getPhotoURL());
+        if (req.getPriority() != null) oldArticle.setPriority(req.getPriority());
+
+        articleRepository.save(oldArticle);
+
+
+    }
+
+
+    public void delete(GetByArticleIdRequest req){
+        articleRepository.deleteById(req.getId());
+    }
+
     private Article convertNewArticleRequestToArticle(NewArticleRequest newArticleRequest){
         final var article = new Article();
         final var themes = themeRepository.findAllById(newArticleRequest.getThemeIds());
@@ -60,4 +89,6 @@ public class ArticleService {
 
         return article;
     }
+
+
 }

@@ -23,7 +23,6 @@ import java.util.Optional;
 @RequestMapping("common")
 @Validated
 public class ArticleController {
-
     @Autowired
     private ArticleService articleService;
 
@@ -60,4 +59,7 @@ public class ArticleController {
 
         return ResponseEntity.ok(articlesResponse);
     }
+
+
+
 }

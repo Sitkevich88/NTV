@@ -13,6 +13,7 @@ import ru.ntv.entity.Theme;
 import ru.ntv.repo.ArticleRepository;
 import ru.ntv.repo.ThemeRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,7 @@ public class ArticleService {
         return res;
     }
 
-    public void update(UpdateRequest req) throws ArticleNotFoundException{
+    public List<Theme> update(UpdateRequest req) throws ArticleNotFoundException{
         var oldArticleOptional = articleRepository.findById(req.getId());
         if (oldArticleOptional.isEmpty()) throw new ArticleNotFoundException("Article with that id wasn't found!");
 
@@ -59,14 +60,20 @@ public class ArticleService {
         if (req.getText() != null) oldArticle.setText(req.getText());
         if (req.getHeader() != null) oldArticle.setHeader(req.getHeader());
         if (req.getSubheader() != null) oldArticle.setSubheader(req.getSubheader());
+
+        List<Theme> thems = new ArrayList<>();
+
         if (req.getThemeIds() != null) {
             var themes = themeRepository.findAllById(req.getThemeIds());
+            thems = themes;
             oldArticle.setThemes(themes);
         }
         if (req.getPhotoURL() != null) oldArticle.setPhoto(req.getPhotoURL());
         if (req.getPriority() != null) oldArticle.setPriority(req.getPriority());
 
         articleRepository.save(oldArticle);
+
+        return thems;
 
 
     }
@@ -79,6 +86,7 @@ public class ArticleService {
     private Article convertNewArticleRequestToArticle(NewArticleRequest newArticleRequest){
         final var article = new Article();
         final var themes = themeRepository.findAllById(newArticleRequest.getThemeIds());
+
 
         article.setThemes(themes);
         article.setHeader(newArticleRequest.getHeader());

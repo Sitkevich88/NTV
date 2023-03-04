@@ -5,13 +5,20 @@ import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.admin.CreateThemeRequest;
 import ru.ntv.dto.request.admin.DeleteThemeRequest;
 import ru.ntv.dto.response.common.ThemesResponse;
+import ru.ntv.entity.Article;
 import ru.ntv.entity.Theme;
+import ru.ntv.repo.ArticleRepository;
 import ru.ntv.repo.ThemeRepository;
+
+import java.util.List;
 
 @Service
 public class ThemesService {
     @Autowired
     private ThemeRepository themeRepository;
+
+    @Autowired
+    ArticleRepository articleRepository;
 
     public ThemesResponse getAllThemes(){
         final var response = new ThemesResponse();
@@ -27,6 +34,16 @@ public class ThemesService {
     }
 
     public void delete(DeleteThemeRequest req){
-        themeRepository.deleteById(req.getId());
+        Theme theme = themeRepository.findById(req.getId()).orElse(null);
+        if (theme == null){
+            return;
+        }
+        List<Article> articles = theme.getArticles();
+        for (Article article : articles) {
+            article.getThemes().remove(theme);
+            articleRepository.save(article);
+        }
+
+        themeRepository.delete(theme);
     }
 }

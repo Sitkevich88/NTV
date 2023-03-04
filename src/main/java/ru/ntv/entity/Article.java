@@ -17,7 +17,7 @@ public class Article {
     @Column(name = "id")
     private int id;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
             name = "article_theme",
             joinColumns = {@JoinColumn(name = "article_id")},

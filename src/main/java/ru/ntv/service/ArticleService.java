@@ -2,6 +2,8 @@ package ru.ntv.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.admin.NewArticleRequest;
 import ru.ntv.dto.request.admin.UpdateRequest;
@@ -44,9 +46,9 @@ public class ArticleService {
         );
     }
 
-    public ArticlesResponse getAll(){
+    public ArticlesResponse getAll(Integer offset, Integer limit){
         final var res = new ArticlesResponse();
-        res.setArticles(articleRepository.findAll());
+        res.setArticles(articleRepository.findAll(PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "creationDate"))).get().toList());
 
         return res;
     }

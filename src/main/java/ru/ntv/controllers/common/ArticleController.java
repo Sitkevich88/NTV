@@ -2,6 +2,8 @@ package ru.ntv.controllers.common;
 
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -54,8 +56,11 @@ public class ArticleController {
     }
 
     @GetMapping("articles")
-    ResponseEntity<ArticlesResponse> getAllArticles(){
-        final var articlesResponse = articleService.getAll();
+    ResponseEntity<ArticlesResponse> getAllArticles(
+            @RequestParam("offset") @Min(0) Integer offset,
+            @RequestParam("limit") @Min(1) @Max(100) Integer limit
+    ){
+        final var articlesResponse = articleService.getAll(offset, limit);
 
         return ResponseEntity.ok(articlesResponse);
     }

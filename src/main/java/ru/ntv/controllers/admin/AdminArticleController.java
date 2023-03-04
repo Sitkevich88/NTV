@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.ntv.dto.request.admin.CreateThemeRequest;
-import ru.ntv.dto.request.admin.DeleteThemeRequest;
 import ru.ntv.dto.request.admin.NewArticleRequest;
 import ru.ntv.dto.request.admin.UpdateRequest;
 import ru.ntv.dto.request.common.GetByArticleIdRequest;
@@ -14,7 +12,6 @@ import ru.ntv.entity.Theme;
 import ru.ntv.exception.ArticleNotFoundException;
 import ru.ntv.dto.response.admin.NewArticleResponse;
 import ru.ntv.service.ArticleService;
-import ru.ntv.service.ThemesService;
 
 import java.util.List;
 
@@ -27,8 +24,7 @@ public class AdminArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private ThemesService themesService;
+
 
     @PostMapping("createArticle")
     ResponseEntity<NewArticleResponse> createArticle(@Valid @RequestBody NewArticleRequest newArticleRequest){
@@ -53,16 +49,5 @@ public class AdminArticleController {
     }
 
 
-    @PostMapping("createTheme")
-    ResponseEntity<?> create(@Valid @RequestBody CreateThemeRequest req){
-        themesService.create(req);
-        return ResponseEntity.ok("OK");
-    }
-
-    @PostMapping("deleteTheme")
-    ResponseEntity<?> delete(@Valid @RequestBody DeleteThemeRequest req){
-        themesService.delete(req);
-        return ResponseEntity.ok("OK");
-    }
 
 }

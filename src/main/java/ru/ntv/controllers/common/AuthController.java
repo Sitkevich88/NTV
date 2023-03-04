@@ -19,12 +19,12 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @PostMapping("signin")
+    @PostMapping("sign-in")
     ResponseEntity<AuthResponse> signIn(@Valid @RequestBody OldUser user) throws BadCredentialsException {
         return ResponseEntity.ok(authService.signIn(user));
     }
 
-    @PostMapping("signup")
+    @PostMapping("sign-up")
     ResponseEntity<AuthResponse> signUp(@Valid @RequestBody NewUser newUser){
         return authService.signUp(newUser);
     }

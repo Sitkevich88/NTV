@@ -22,13 +22,13 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("common")
+@RequestMapping("article")
 @Validated
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("article/byHeader")
+    @GetMapping("by-header")
     ResponseEntity<ArticleResponse> articleByArticleHeader(@Valid @RequestBody GetByArticleHeaderRequest req){
         final var res = new ArticleResponse();
 
@@ -38,14 +38,14 @@ public class ArticleController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("article/byThemes")
+    @GetMapping("by-themes")
     ResponseEntity<ArticleListResponse> articlesByArticleThemes( @RequestBody GetByArticleThemesRequest req){
         List<Article> optionalArticleList = articleService.getArticlesByThemes(req.getThemes());
 
         return ResponseEntity.ok(new ArticleListResponse(optionalArticleList));
     }
 
-    @GetMapping("article/byId")
+    @GetMapping("by-id")
     ResponseEntity<ArticleResponse> articleByArticleId(@RequestBody GetByArticleIdRequest req){
         final var res = new ArticleResponse();
 
@@ -55,7 +55,7 @@ public class ArticleController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("articles")
+    @GetMapping
     ResponseEntity<ArticlesResponse> getAllArticles(
             @RequestParam("offset") @Min(0) Integer offset,
             @RequestParam("limit") @Min(1) @Max(100) Integer limit

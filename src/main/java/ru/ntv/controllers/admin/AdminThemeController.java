@@ -20,13 +20,13 @@ public class AdminThemeController {
     private ThemesService themesService;
 
 
-    @PostMapping("createTheme")
+    @PostMapping("theme")
     ResponseEntity<?> create(@Valid @RequestBody CreateThemeRequest req){
         themesService.create(req);
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping("deleteTheme")
+    @DeleteMapping("theme")
     ResponseEntity<?> delete(@Valid @RequestBody DeleteThemeRequest req){
         themesService.delete(req);
         return ResponseEntity.ok("OK");

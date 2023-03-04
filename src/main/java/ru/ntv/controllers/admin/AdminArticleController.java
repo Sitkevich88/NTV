@@ -26,14 +26,14 @@ public class AdminArticleController {
 
 
 
-    @PostMapping("createArticle")
+    @PostMapping("article")
     ResponseEntity<NewArticleResponse> createArticle(@Valid @RequestBody NewArticleRequest newArticleRequest){
         articleService.createArticle(newArticleRequest);
 
         return ResponseEntity.ok(new NewArticleResponse("", "OK"));
     }
 
-    @PostMapping("deleteArticle")
+    @DeleteMapping("article")
     ResponseEntity<?> delete(@Valid @RequestBody GetByArticleIdRequest req){
         articleService.delete(req);
 
@@ -41,7 +41,7 @@ public class AdminArticleController {
     }
 
 
-    @PostMapping("updateArticle")
+    @PutMapping("article")
     ResponseEntity<?> updateArticle(@Valid @RequestBody UpdateRequest req) throws ArticleNotFoundException {
         List<Theme> list = articleService.update(req);
 

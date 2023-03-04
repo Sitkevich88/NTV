@@ -28,7 +28,7 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("article/byArticleHeader")
+    @GetMapping("article/byHeader")
     ResponseEntity<ArticleResponse> articleByArticleHeader(@Valid @RequestBody GetByArticleHeaderRequest req){
         final var res = new ArticleResponse();
 
@@ -38,7 +38,7 @@ public class ArticleController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("article/byArticleThemes")
+    @GetMapping("article/byThemes")
     ResponseEntity<ArticleListResponse> articlesByArticleThemes( @RequestBody GetByArticleThemesRequest req){
         List<Article> optionalArticleList = articleService.getArticlesByThemes(req.getThemes());
 

@@ -45,7 +45,7 @@ public class ArticleService {
 
     public ArticlesResponse getAll(Integer offset, Integer limit){
         final var res = new ArticlesResponse();
-        res.setArticles(articleRepository.findAll(PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "creationDate"))).get().toList());
+        res.setArticles(articleRepository.findAll(PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "creationDate"))).get().toList());
 
         return res;
     }

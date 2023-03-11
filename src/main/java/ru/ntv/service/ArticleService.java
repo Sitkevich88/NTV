@@ -1,21 +1,16 @@
 package ru.ntv.service;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.admin.NewArticleRequest;
-import ru.ntv.dto.request.admin.UpdateRequest;
-import ru.ntv.dto.request.common.GetByArticleIdRequest;
 import ru.ntv.exception.ArticleNotFoundException;
 import ru.ntv.dto.response.common.ArticlesResponse;
 import ru.ntv.entity.Article;
-import ru.ntv.entity.Theme;
 import ru.ntv.repo.ArticleRepository;
 import ru.ntv.repo.ThemeRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,14 +23,16 @@ public class ArticleService {
     @Autowired
     private ThemeRepository themeRepository;
 
-    public Optional<Article> findByHeader(String header){
-        return articleRepository.findByHeader(header);
+    public Optional<List<Article>> findByHeader(String header){
+        return articleRepository.findAllByHeaderContainingIgnoreCase(header);
     }
 
-    public List<Article> getArticlesByThemes(List<Theme> themes) {
-        Long count = (long) themes.size();
-        return articleRepository.findByThemesContainingAll(themes, count);
+    public List<Article> getArticlesByThemes(List<Integer> theme_ids) {
+        final var themes = themeRepository.findAllById(theme_ids);
+
+        return articleRepository.findByThemesIn(themes);
     }
+
     public Optional<Article> findById(int id){
         return articleRepository.findById(id);
     }
@@ -53,42 +50,34 @@ public class ArticleService {
         return res;
     }
 
-    public List<Theme> update(UpdateRequest req) throws ArticleNotFoundException{
-        var oldArticleOptional = articleRepository.findById(req.getId());
-        if (oldArticleOptional.isEmpty()) throw new ArticleNotFoundException("Article with that id wasn't found!");
+    public void update(int id, NewArticleRequest req) throws ArticleNotFoundException{
+        final var oldArticleOptional = articleRepository.findById(id);
+        if (oldArticleOptional.isEmpty()) throw new ArticleNotFoundException("Article not found!");
 
-        var oldArticle = oldArticleOptional.get();
+        final var article = oldArticleOptional.get();
 
-        if (req.getText() != null) oldArticle.setText(req.getText());
-        if (req.getHeader() != null) oldArticle.setHeader(req.getHeader());
-        if (req.getSubheader() != null) oldArticle.setSubheader(req.getSubheader());
-
-        List<Theme> thems = new ArrayList<>();
+        if (req.getText() != null) article.setText(req.getText());
+        if (req.getHeader() != null) article.setHeader(req.getHeader());
+        if (req.getSubheader() != null) article.setSubheader(req.getSubheader());
+        if (req.getPhotoURL() != null) article.setPhoto(req.getPhotoURL());
+        if (req.getPriority() != null) article.setPriority(req.getPriority());
 
         if (req.getThemeIds() != null) {
-            var themes = themeRepository.findAllById(req.getThemeIds());
-            thems = themes;
-            oldArticle.setThemes(themes);
+            final var themes = themeRepository.findAllById(req.getThemeIds());
+            article.setThemes(themes);
         }
-        if (req.getPhotoURL() != null) oldArticle.setPhoto(req.getPhotoURL());
-        if (req.getPriority() != null) oldArticle.setPriority(req.getPriority());
 
-        articleRepository.save(oldArticle);
-
-        return thems;
-
-
+        articleRepository.save(article);
     }
 
 
-    public void delete(GetByArticleIdRequest req){
-        articleRepository.deleteById(req.getId());
+    public void delete(int id){
+        articleRepository.deleteById(id);
     }
 
     private Article convertNewArticleRequestToArticle(NewArticleRequest newArticleRequest){
         final var article = new Article();
         final var themes = themeRepository.findAllById(newArticleRequest.getThemeIds());
-
 
         article.setThemes(themes);
         article.setHeader(newArticleRequest.getHeader());
@@ -99,6 +88,4 @@ public class ArticleService {
 
         return article;
     }
-
-
 }

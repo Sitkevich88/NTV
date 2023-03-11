@@ -21,7 +21,7 @@ public class NewArticleRequest {
     @Size(min = 2, max = 100)
     private String subheader;
 
-    @Size(min = 2, max = 255)
+    @Size(min = 2, max = 65535)
     private String text;
 
     @Min(1)

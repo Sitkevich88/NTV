@@ -1,16 +1,11 @@
 package ru.ntv.controllers.common;
 
-
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.ntv.dto.request.common.GetByArticleHeaderRequest;
-import ru.ntv.dto.request.common.GetByArticleIdRequest;
-import ru.ntv.dto.request.common.GetByArticleThemesRequest;
 import ru.ntv.dto.response.common.ArticleListResponse;
 import ru.ntv.dto.response.common.ArticleResponse;
 import ru.ntv.dto.response.common.ArticlesResponse;
@@ -22,40 +17,40 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("article")
 @Validated
+@RequestMapping("articles")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("by-header")
-    ResponseEntity<ArticleResponse> articleByArticleHeader(@Valid @RequestBody GetByArticleHeaderRequest req){
+    @GetMapping(params = "header")
+    ResponseEntity<ArticlesResponse> getArticlesByHeader( @RequestParam String header){
+        final var res = new ArticlesResponse();
+
+        Optional<List<Article>> optionalArticles = articleService.findByHeader(header);
+        optionalArticles.ifPresent(res::setArticles);
+
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping(params = "theme_ids")
+    ResponseEntity<ArticleListResponse> getArticlesByThemeIds( @RequestParam List<Integer> theme_ids){
+        final var articles = articleService.getArticlesByThemes(theme_ids);
+
+        return ResponseEntity.ok(new ArticleListResponse(articles));
+    }
+
+    @GetMapping(params = "id")
+    ResponseEntity<ArticleResponse> getArticleById( @RequestParam int id){
         final var res = new ArticleResponse();
 
-        Optional<Article> optionalArticle = articleService.findByHeader(req.getHeader());
+        Optional<Article> optionalArticle = articleService.findById(id);
         optionalArticle.ifPresent(res::setArticle);
 
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("by-themes")
-    ResponseEntity<ArticleListResponse> articlesByArticleThemes( @RequestBody GetByArticleThemesRequest req){
-        List<Article> optionalArticleList = articleService.getArticlesByThemes(req.getThemes());
-
-        return ResponseEntity.ok(new ArticleListResponse(optionalArticleList));
-    }
-
-    @GetMapping("by-id")
-    ResponseEntity<ArticleResponse> articleByArticleId(@RequestBody GetByArticleIdRequest req){
-        final var res = new ArticleResponse();
-
-        Optional<Article> optionalArticle = articleService.findById(req.getId());
-        optionalArticle.ifPresent(res::setArticle);
-
-        return ResponseEntity.ok(res);
-    }
-
-    @GetMapping
+    @GetMapping(params = {"offset", "limit"})
     ResponseEntity<ArticlesResponse> getAllArticles(
             @RequestParam("offset") @Min(0) Integer offset,
             @RequestParam("limit") @Min(1) @Max(100) Integer limit
@@ -64,7 +59,4 @@ public class ArticleController {
 
         return ResponseEntity.ok(articlesResponse);
     }
-
-
-
 }

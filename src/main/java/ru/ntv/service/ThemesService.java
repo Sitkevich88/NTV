@@ -3,7 +3,6 @@ package ru.ntv.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.admin.CreateThemeRequest;
-import ru.ntv.dto.request.admin.DeleteThemeRequest;
 import ru.ntv.dto.response.common.ThemesResponse;
 import ru.ntv.entity.Article;
 import ru.ntv.entity.Theme;
@@ -33,11 +32,11 @@ public class ThemesService {
         themeRepository.save(theme);
     }
 
-    public void delete(DeleteThemeRequest req){
-        Theme theme = themeRepository.findById(req.getId()).orElse(null);
-        if (theme == null){
-            return;
-        }
+    public void delete(int id){
+        final var theme = themeRepository.findById(id).orElse(null);
+
+        if (theme == null) return;
+
         List<Article> articles = theme.getArticles();
         for (Article article : articles) {
             article.getThemes().remove(theme);

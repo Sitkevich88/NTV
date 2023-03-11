@@ -32,7 +32,7 @@ public class Article {
     @Column(name = "subheader")
     private String subheader;
 
-    @Column(name = "text", unique = true)
+    @Column(name = "text", unique = true, length = 65535)
     private String text;
 
     @Column(name="priority")

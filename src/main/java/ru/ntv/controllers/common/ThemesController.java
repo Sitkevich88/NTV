@@ -9,7 +9,7 @@ import ru.ntv.service.ThemesService;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("theme")
+@RequestMapping("themes")
 @Validated
 public class ThemesController {
 
@@ -17,10 +17,9 @@ public class ThemesController {
     private ThemesService themesService;
 
     @GetMapping
-    ResponseEntity<ThemesResponse> getThemes(){
+    ResponseEntity<ThemesResponse> getAllThemes(){
         final var response = themesService.getAllThemes();
 
         return ResponseEntity.ok(response);
     }
-
 }

@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.ntv.dto.request.admin.NewArticleRequest;
+import ru.ntv.entity.Article;
 import ru.ntv.exception.ArticleNotFoundException;
-import ru.ntv.dto.response.admin.NewArticleResponse;
 import ru.ntv.service.ArticleService;
 
 @RestController
@@ -21,10 +21,10 @@ public class AdminArticleController {
 
 
     @PostMapping
-    ResponseEntity<NewArticleResponse> createArticle(@Valid @RequestBody NewArticleRequest newArticleRequest){
-        articleService.createArticle(newArticleRequest);
+    ResponseEntity<Article> createArticle(@Valid @RequestBody NewArticleRequest newArticleRequest){
+        final var article = articleService.createArticle(newArticleRequest);
 
-        return ResponseEntity.ok(new NewArticleResponse("", "OK"));
+        return ResponseEntity.ok(article);
     }
 
     @DeleteMapping(params = "id")
@@ -36,12 +36,12 @@ public class AdminArticleController {
 
 
     @PutMapping(params = "id")
-    ResponseEntity<NewArticleResponse> updateArticle(
+    ResponseEntity<Article> updateArticle(
             @RequestParam int id,
             @Valid @RequestBody NewArticleRequest req
     ) throws ArticleNotFoundException {
-        articleService.update(id, req);
+        final var article = articleService.update(id, req);
 
-        return ResponseEntity.ok(new NewArticleResponse("", "OK"));
+        return ResponseEntity.ok(article);
     }
 }

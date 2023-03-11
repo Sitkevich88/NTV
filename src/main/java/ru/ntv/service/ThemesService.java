@@ -26,10 +26,10 @@ public class ThemesService {
         return response;
     }
 
-    public void create(CreateThemeRequest req){
+    public Theme create(CreateThemeRequest req){
         var theme = new Theme();
         theme.setThemeName(req.getName());
-        themeRepository.save(theme);
+        return themeRepository.save(theme);
     }
 
     public void delete(int id){

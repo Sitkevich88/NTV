@@ -37,8 +37,8 @@ public class ArticleService {
         return articleRepository.findById(id);
     }
 
-    public void createArticle(NewArticleRequest newArticleRequest) {
-        articleRepository.save(
+    public Article createArticle(NewArticleRequest newArticleRequest) {
+        return articleRepository.save(
                 convertNewArticleRequestToArticle(newArticleRequest)
         );
     }
@@ -50,7 +50,7 @@ public class ArticleService {
         return res;
     }
 
-    public void update(int id, NewArticleRequest req) throws ArticleNotFoundException{
+    public Article update(int id, NewArticleRequest req) throws ArticleNotFoundException{
         final var oldArticleOptional = articleRepository.findById(id);
         if (oldArticleOptional.isEmpty()) throw new ArticleNotFoundException("Article not found!");
 
@@ -67,7 +67,7 @@ public class ArticleService {
             article.setThemes(themes);
         }
 
-        articleRepository.save(article);
+        return articleRepository.save(article);
     }
 
 

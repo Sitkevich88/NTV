@@ -12,7 +12,6 @@ import ru.ntv.dto.response.auth.AuthResponse;
 import ru.ntv.service.AuthService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("auth")
 @Validated
 public class AuthController {

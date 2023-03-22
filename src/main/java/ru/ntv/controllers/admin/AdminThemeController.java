@@ -10,15 +10,13 @@ import ru.ntv.entity.Theme;
 import ru.ntv.service.ThemesService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("admin/themes")
 @Validated
 public class AdminThemeController {
-
+    
     @Autowired
     private ThemesService themesService;
-
-
+    
     @PostMapping()
     ResponseEntity<Theme> create(@Valid @RequestBody CreateThemeRequest req){
         final var theme = themesService.create(req);

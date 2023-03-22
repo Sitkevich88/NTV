@@ -11,7 +11,6 @@ import ru.ntv.exception.ArticleNotFoundException;
 import ru.ntv.service.ArticleService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("admin/articles")
 @Validated
 public class AdminArticleController {

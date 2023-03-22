@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
 @Validated
 @RequestMapping("articles")
 public class ArticleController {

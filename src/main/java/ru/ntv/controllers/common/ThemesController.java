@@ -8,7 +8,6 @@ import ru.ntv.dto.response.common.ThemesResponse;
 import ru.ntv.service.ThemesService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("themes")
 @Validated
 public class ThemesController {

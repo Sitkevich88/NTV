@@ -71,8 +71,8 @@ public class SecurityConfig{
                         .hasAuthority(DatabaseRole.ROLE_ADMIN.name())
                         .requestMatchers("/user/**")
                         .hasAuthority(DatabaseRole.ROLE_CLIENT.name())
-                        .requestMatchers("*")
-                        .denyAll()
+                        .anyRequest()
+                        .permitAll()
                 )
                 .build();
     }

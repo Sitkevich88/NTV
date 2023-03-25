@@ -3,9 +3,10 @@ package ru.ntv.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.admin.NewArticleRequest;
-import ru.ntv.exception.ArticleNotFoundException;
 import ru.ntv.dto.response.common.ArticlesResponse;
 import ru.ntv.entity.Article;
 import ru.ntv.repo.ArticleRepository;
@@ -50,9 +51,11 @@ public class ArticleService {
         return res;
     }
 
-    public Article update(int id, NewArticleRequest req) throws ArticleNotFoundException{
+    public ResponseEntity<?> update(int id, NewArticleRequest req) {
         final var oldArticleOptional = articleRepository.findById(id);
-        if (oldArticleOptional.isEmpty()) throw new ArticleNotFoundException("Article not found!");
+        if (oldArticleOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Article not found!");
+        }
 
         final var article = oldArticleOptional.get();
 
@@ -67,7 +70,7 @@ public class ArticleService {
             article.setThemes(themes);
         }
 
-        return articleRepository.save(article);
+        return ResponseEntity.ok(articleRepository.save(article));
     }
 
 

@@ -7,7 +7,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.ntv.dto.request.admin.NewArticleRequest;
 import ru.ntv.entity.Article;
-import ru.ntv.exception.ArticleNotFoundException;
 import ru.ntv.service.ArticleService;
 
 @RestController
@@ -35,12 +34,10 @@ public class AdminArticleController {
 
 
     @PutMapping(params = "id")
-    ResponseEntity<Article> updateArticle(
+    ResponseEntity<?> updateArticle(
             @RequestParam int id,
             @Valid @RequestBody NewArticleRequest req
-    ) throws ArticleNotFoundException {
-        final var article = articleService.update(id, req);
-
-        return ResponseEntity.ok(article);
+    ){
+        return articleService.update(id, req);
     }
 }

@@ -65,7 +65,7 @@ public class SecurityConfig{
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth/**", "/common/**", "/articles/**", "/themes/**")
+                        .requestMatchers("/auth/**", "/articles/**", "/themes/**")
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasAuthority(DatabaseRole.ROLE_ADMIN.name())

@@ -1,27 +1,29 @@
 package ru.ntv.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.admin.CreateThemeRequest;
 import ru.ntv.dto.response.common.ThemesResponse;
-import ru.ntv.entity.Article;
-import ru.ntv.entity.Theme;
-import ru.ntv.repo.ArticleRepository;
-import ru.ntv.repo.ThemeRepository;
+import ru.ntv.entity.articles.Article;
+import ru.ntv.entity.articles.Theme;
+import ru.ntv.repo.article.ArticleRepository;
+import ru.ntv.repo.article.ThemeRepository;
 
 import java.util.List;
 
 @Service
 public class ThemesService {
-    @Autowired
-    private ThemeRepository themeRepository;
+    private final ThemeRepository themeRepository;
 
-    @Autowired
-    ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
+
+    public ThemesService(ThemeRepository themeRepository, ArticleRepository articleRepository) {
+        this.themeRepository = themeRepository;
+        this.articleRepository = articleRepository;
+    }
 
     public ThemesResponse getAllThemes(){
         final var response = new ThemesResponse();
-        response.setThemes(themeRepository.findAll());
+        response.setThemes((List<Theme>) themeRepository.findAll());
 
         return response;
     }

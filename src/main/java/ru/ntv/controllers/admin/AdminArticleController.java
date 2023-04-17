@@ -1,12 +1,12 @@
 package ru.ntv.controllers.admin;
 
-import jakarta.validation.Valid;
+import javax.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.ntv.dto.request.admin.NewArticleRequest;
-import ru.ntv.entity.Article;
+import ru.ntv.entity.articles.Article;
 import ru.ntv.exception.ArticleNotFoundException;
 import ru.ntv.service.ArticleService;
 
@@ -15,8 +15,11 @@ import ru.ntv.service.ArticleService;
 @Validated
 public class AdminArticleController {
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
+
+    public AdminArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
 
     @PostMapping

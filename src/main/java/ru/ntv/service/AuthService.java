@@ -1,6 +1,5 @@
 package ru.ntv.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,29 +11,37 @@ import org.springframework.stereotype.Service;
 import ru.ntv.dto.request.auth.NewUser;
 import ru.ntv.dto.request.auth.OldUser;
 import ru.ntv.dto.response.auth.AuthResponse;
-import ru.ntv.entity.User;
+import ru.ntv.entity.users.User;
 import ru.ntv.etc.DatabaseRole;
-import ru.ntv.repo.RoleRepository;
-import ru.ntv.repo.UserRepository;
+import ru.ntv.repo.user.RoleRepository;
+import ru.ntv.repo.user.UserRepository;
 import ru.ntv.security.JwtTokenProvider;
 
 @Service
 public class AuthService {
 
-    @Autowired
+    final
     AuthenticationManager authenticationManager;
 
-    @Autowired
+    final
     JwtTokenProvider jwtUtils;
 
-    @Autowired
+    final
     UserRepository userRepository;
 
-    @Autowired
+    final
     PasswordEncoder encoder;
 
-    @Autowired
+    final
     RoleRepository roleRepository;
+
+    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider jwtUtils, UserRepository userRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.roleRepository = roleRepository;
+    }
 
     public AuthResponse signIn(OldUser user) throws BadCredentialsException {
         Authentication authentication = authenticationManager.authenticate(
@@ -49,7 +56,7 @@ public class AuthService {
         return response;
     }
 
-    public ResponseEntity<AuthResponse> signUp(NewUser newUser){
+    public ResponseEntity<AuthResponse> signUp(NewUser newUser) {
         final var response = new AuthResponse();
         if (userRepository.existsByLogin(newUser.getUsername())) {
             response.setErrorMessage("This login is already taken");
